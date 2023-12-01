@@ -1,0 +1,20 @@
+auto lo
+iface lo inet loopback
+
+# Enable auto start WIFI with dhcp.
+auto wlp3s0
+iface wlp3s0 inet dhcp
+        wpa-ssid MiWiFi
+        wpa-psk Aa741852
+
+# Disable vmbr0, set to 10.0.0.2
+auto vmbr0
+iface vmbr0 inet static
+        address 10.0.0.2/24
+        bridge-ports enp1s0
+        bridge-stp off
+        bridge-fd 0
+
+iface enp1s0 inet manual
+
+iface enp2s0 inet manual
