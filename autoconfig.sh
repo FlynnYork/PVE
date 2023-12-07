@@ -6,7 +6,7 @@
 #https://github.com/ivanhao/pvetools/blob/master/pvetools.sh
 ###
 echo -e "============================================="
-echo -e "============适配pve8.1, Debian 12============"
+echo -e "============适配PVE8.1, Debian 12============"
 echo -e ""=============================================""
 echo -e "============PVE增加温度，cpu功耗频率，硬盘等信息，去除订阅提示============"
 (curl -Lf -o /tmp/temp.sh https://raw.githubusercontent.com/a904055262/PVE-manager-status/main/showtempcpufreq.sh || curl -Lf -o /tmp/temp.sh https://ghproxy.com/https://raw.githubusercontent.com/a904055262/PVE-manager-status/main/showtempcpufreq.sh) && chmod +x /tmp/temp.sh && /tmp/temp.sh remod
