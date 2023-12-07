@@ -5,15 +5,11 @@
 #pvetools
 #https://github.com/ivanhao/pvetools/blob/master/pvetools.sh
 ###
-echo -e "============================================="
-echo -e "============适配PVE8.1, Debian 12============"
-echo -e ""=============================================""
-echo -e "============PVE增加温度，cpu功耗频率，硬盘等信息，去除订阅提示============"
-(curl -Lf -o /tmp/temp.sh https://raw.githubusercontent.com/a904055262/PVE-manager-status/main/showtempcpufreq.sh || curl -Lf -o /tmp/temp.sh https://ghproxy.com/https://raw.githubusercontent.com/a904055262/PVE-manager-status/main/showtempcpufreq.sh) && chmod +x /tmp/temp.sh && /tmp/temp.sh remod
-####
-####
-####
-echo -e "============修改镜像源============"
+echo "========="
+echo "适配PVE8.1, Debian 12"
+echo ""=========""
+
+echo "修改镜像源"
 #备份源
 cp /etc/apt/sources.list /etc/apt/sources.list.bak && cp /etc/apt/sources.list.d/pve-enterprise.list /etc/apt/sources.list.d/pve-enterprise.list.bak && cp /etc/apt/sources.list.d/ceph.list /etc/apt/sources.list.d/ceph.list.bak
 #去除企业源
@@ -32,7 +28,7 @@ deb https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib 
 #deb-src https://mirrors.ustc.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware
 EOF
 else
-	echo -e 'do not need change sources.list'
+	echo 'do not need change sources.list'
 	
 fi
 
@@ -44,19 +40,24 @@ apt update
 ####
 ####
 ####
-echo -e "============安装网络工具包 vim wpasupplicant============"
+echo "安装网络工具包 vim wpasupplicant"
 apt install -y vim net-tools wpasupplicant
 ####
 ####
 ####
-echo -e "============开启硬件直通支持/etc/default/grub============"
+echo "PVE增加温度，cpu功耗频率，硬盘等信息，去除订阅提示"
+(curl -Lf -o /tmp/temp.sh https://raw.githubusercontent.com/a904055262/PVE-manager-status/main/showtempcpufreq.sh || curl -Lf -o /tmp/temp.sh https://ghproxy.com/https://raw.githubusercontent.com/a904055262/PVE-manager-status/main/showtempcpufreq.sh) && chmod +x /tmp/temp.sh && /tmp/temp.sh remod
+####
+####
+####
+echo "开启硬件直通支持/etc/default/grub"
 if [ `grep "intel_iommu=on" /etc/default/grub|wc -l` = 0 ];then
 	iommu="intel_iommu=on iommu=pt"
 	sed -i.bak "s|quiet|quiet $iommu|" /etc/default/grub
 	#update-grub
-	echo -e '/etc/default/grub has been changed'
+	echo '/etc/default/grub has been changed'
 else
-	echo -e 'do not need change /etc/default/grub'	
+	echo 'do not need change /etc/default/grub'	
 fi
 if [ `grep "vfio" /etc/modules|wc -l` = 0 ];then
 	cp /etc/modules /etc/modules.bak
@@ -67,12 +68,12 @@ vfio_pci
 vfio_virqfd
 EOF
 else
-	echo -e 'do not need change /etc/modules'
+	echo 'do not need change /etc/modules'
 fi
 ####
 ####
 ####
-echo -e "============屏蔽Intel核显卡驱动============"
+echo "屏蔽Intel核显卡驱动"
 if [ `grep '^blacklist i915$' /etc/modprobe.d/pve-blacklist.conf|wc -l` = 0 ];then
 	cp /etc/modprobe.d/pve-blacklist.conf /etc/modprobe.d/pve-blacklist.conf.bak
 	cat >>/etc/modprobe.d/pve-blacklist.conf<<EOF
@@ -82,28 +83,13 @@ options vfio_iommu_type1 allow_unsafe_interrupts=1
 EOF
 
 else
-	echo -e 'do not need change pve-blacklist.conf'
+	echo 'do not need change pve-blacklist.conf'
 	
 fi
+echo "上传核显直通rom"
+wget -O /usr/share/kvm/4-14.rom https://cdn.jsdelivr.net/gh/FlynnYork/PVE@main/res/4-14.rom
+
 update-grub && update-initramfs -u -k all
 
 
-echo -e "============安装完成，请重启============"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+echo "安装完成，请重启"
