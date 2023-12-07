@@ -90,7 +90,7 @@ echo "上传核显直通rom"
 wget -O /usr/share/kvm/4-14.rom https://cdn.jsdelivr.net/gh/FlynnYork/PVE@main/res/4-14.rom
 echo "上传windows11虚拟机配置"
 #wget -O /etc/pve/qemu-server/100.conf https://cdn.jsdelivr.net/gh/FlynnYork/PVE@main/res/100.conf
-cat >/etc/pve/qemu-server/105.conf<<EOF
+cat >/etc/pve/qemu-server/100.conf<<EOF
 args: -set device.hostpci0.addr=02.0 -set device.hostpci0.x-igd-gms=0x2 -set device.hostpci0.x-igd-opregion=on
 vga: none
 name: Windows11Pro
