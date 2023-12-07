@@ -88,6 +88,41 @@ else
 fi
 echo "上传核显直通rom"
 wget -O /usr/share/kvm/4-14.rom https://cdn.jsdelivr.net/gh/FlynnYork/PVE@main/res/4-14.rom
+echo "上传windows11虚拟机配置"
+#wget -O /etc/pve/qemu-server/100.conf https://cdn.jsdelivr.net/gh/FlynnYork/PVE@main/res/100.conf
+cat >/etc/pve/qemu-server/105.conf<<EOF
+args: -set device.hostpci0.addr=02.0 -set device.hostpci0.x-igd-gms=0x2 -set device.hostpci0.x-igd-opregion=on
+vga: none
+name: Windows11Pro
+bios: ovmf
+sockets: 1
+cores: 4
+cpu: host
+ostype: win11
+machine: pc-i440fx-8.1
+memory: 4096
+hostpci0: 0000:00:02.0,legacy-igd=1,romfile=4-14.rom
+hostpci1: 0000:00:1f.3
+hostpci2: 0000:04:00.0
+hostpci3: 0000:00:17.0
+usb0: host=0bda:b85b
+usb1: host=0f39:1048
+usb2: host=046d:c068
+usb3: host=03f0:ae07
+usb4: host=1e3d:8246
+ide2: none,media=cdrom
+sata0: /dev/disk/by-id/nvme-Seagate_ZP1000GV30012_71V01700,size=976762584K
+boot: order=ide2;sata0
+net0: e1000=BC:24:11:24:B2:BB,bridge=vmbr0,firewall=1
+numa: 0
+scsihw: virtio-scsi-single
+meta: creation-qemu=8.1.2,ctime=1701934486
+smbios1: uuid=48a47df0-7641-4c73-ac44-e51f20e5dc5c
+vmgenid: f00f8de2-1ef5-4567-b06a-65c587b37cdd
+EOF
+
+echo "配置开机自启动"
+qm set 100 --onboot 1
 
 update-grub && update-initramfs -u -k all
 
