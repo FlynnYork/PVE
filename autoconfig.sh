@@ -99,7 +99,7 @@ cores: 4
 cpu: host
 hostpci0: 0000:00:02.0,legacy-igd=1,romfile=4-14.rom
 hostpci1: 0000:00:1f.3
-#hostpci2: 0000:04:00.0
+hostpci2: 0000:04:00.0
 ide2: none,media=cdrom
 machine: pc-i440fx-8.1
 memory: 4096
