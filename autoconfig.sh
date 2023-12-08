@@ -124,9 +124,6 @@ vga: none
 vmgenid: f00f8de2-1ef5-4567-b06a-65c587b37cdd
 EOF
 
-#配置开机自启动
-qm set 100 --onboot 1
-
 echo "配置pvevm-hooks直通钩子脚本"
 #克隆本仓库至/root目录
 git clone https://gitee.com/hellozhing/pvevm-hooks.git
