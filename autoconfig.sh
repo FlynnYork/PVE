@@ -45,6 +45,9 @@ apt install -y git vim net-tools
 #添加无线网卡支持
 apt install -y wpasupplicant
 
+#添加lm-sensors 和 linux-cpupower 功耗频率温度
+apt install -y lm-sensors linux-cpupower
+
 echo "PVE增加温度，cpu功耗频率，硬盘等信息，去除订阅提示"
 (curl -Lf -o /tmp/temp.sh https://raw.githubusercontent.com/a904055262/PVE-manager-status/main/showtempcpufreq.sh || curl -Lf -o /tmp/temp.sh https://ghproxy.com/https://raw.githubusercontent.com/a904055262/PVE-manager-status/main/showtempcpufreq.sh) && chmod +x /tmp/temp.sh && /tmp/temp.sh remod
 
