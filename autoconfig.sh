@@ -135,6 +135,10 @@ cp hooks-igpupt.pl /var/lib/vz/snippets/hooks-igpupt.pl
 #将钩子脚本应用至虚拟机
 qm set 100 --hookscript local:snippets/hooks-igpupt.pl
 echo "pvevm-hook已配置完"
+#添加OVMF(UEFI)主板的EFI磁盘，未添加报警告WARN: no efidisk configured! Using temporary efivars disk.可不管
+qm set 100 -efidisk0 local:100,format=qcow2,efitype=4m,pre-enrolled-keys=1
+echo "已添加EFI Disk"
+#更新grub和pve-blacklist
 update-grub && update-initramfs -u -k all
 
 
