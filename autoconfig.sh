@@ -7,10 +7,16 @@
 #pvetools
 #https://github.com/ivanhao/pvetools/blob/master/pvetools.sh
 ###
-echo "一键脚本适配PVE8.1, Debian 12, windows11安装"
+echo "
+##############################################
+#一键脚本适配PVE8.1, Debian 12, windows11安装#
+##############################################"
 
 
-echo "更换镜像源"
+echo "
+############
+#更换镜像源#
+############"
 #备份源
 cp /etc/apt/sources.list /etc/apt/sources.list.bak && cp /etc/apt/sources.list.d/pve-enterprise.list /etc/apt/sources.list.d/pve-enterprise.list.bak && cp /etc/apt/sources.list.d/ceph.list /etc/apt/sources.list.d/ceph.list.bak
 #去除企业源
@@ -48,7 +54,10 @@ apt install -y wpasupplicant
 #添加lm-sensors 和 linux-cpupower 功耗频率温度
 apt install -y lm-sensors linux-cpupower
 
-echo "PVE增加温度，cpu功耗频率，硬盘等信息，去除订阅提示"
+echo "
+####################################################
+#PVE增加温度，cpu功耗频率，硬盘等信息，去除订阅提示#
+####################################################"
 (curl -Lf -o /tmp/temp.sh https://raw.githubusercontent.com/a904055262/PVE-manager-status/main/showtempcpufreq.sh || curl -Lf -o /tmp/temp.sh https://ghproxy.com/https://raw.githubusercontent.com/a904055262/PVE-manager-status/main/showtempcpufreq.sh) && chmod +x /tmp/temp.sh && /tmp/temp.sh remod
 
 echo "开启硬件直通支持"
@@ -91,7 +100,10 @@ fi
 echo "上传核显直通rom"
 wget -O /usr/share/kvm/4-14.rom https://cdn.jsdelivr.net/gh/FlynnYork/PVE@main/res/4-14.rom
 
-echo "上传windows11虚拟机配置"
+echo "
+###################
+#创建windows虚拟机#
+###################"
 #wget -O /etc/pve/qemu-server/100.conf https://cdn.jsdelivr.net/gh/FlynnYork/PVE@main/res/100.conf
 
 cat >/etc/pve/qemu-server/100.conf<<EOF
@@ -127,7 +139,10 @@ vga: none
 vmgenid: f00f8de2-1ef5-4567-b06a-65c587b37cdd
 EOF
 
-echo "配置pvevm-hooks直通钩子脚本"
+echo "
+#############################
+#配置pvevm-hooks直通钩子脚本#
+#############################"
 #克隆本仓库至/root目录
 git clone https://gitee.com/hellozhing/pvevm-hooks.git
 #添加可执行权限
@@ -144,6 +159,28 @@ echo "已添加EFI Disk"
 #更新grub和pve-blacklist
 update-grub && update-initramfs -u -k all
 
+echo "
+################
+#创建群晖虚拟机#
+################"
+cat >/etc/pve/qemu-server/101.conf<<EOF
+#挂载img镜像为虚拟U盘引导
+args: -device 'qemu-xhci,addr=0x18' -drive 'id=synoboot,file=/var/lib/vz/template/iso/rr_4GB.img,if=none,format=raw' -device 'usb-storage,id=synoboot,drive=synoboot,bootindex=1'
+boot: order=ide2;net0
+cores: 4
+cpu: host
+ide2: none,media=cdrom
+memory: 2048
+meta: creation-qemu=8.1.2,ctime=1702061642
+name: SA6400
+net0: virtio=BC:24:11:CE:F6:8D,bridge=vmbr0,firewall=1
+numa: 0
+ostype: l26
+scsihw: virtio-scsi-single
+smbios1: uuid=8a8cecf1-48a6-4574-9657-88694c60d4ba
+sockets: 1
+vmgenid: b0dd6244-a6ca-4896-99af-d0eb07798e87
+EOF
 
 echo "安装完成，请重启"
 
