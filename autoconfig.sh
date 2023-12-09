@@ -181,6 +181,13 @@ smbios1: uuid=8a8cecf1-48a6-4574-9657-88694c60d4ba
 sockets: 1
 vmgenid: b0dd6244-a6ca-4896-99af-d0eb07798e87
 EOF
+#挂载固态硬盘复制rr_4GB.img
+echo "挂载复制引导镜像请耐心等待"
+mkdir /mnt/nvmeshare && mount /dev/nvme0n1p5 /mnt/nvmeshare/
+cp /mnt/nvmeshare/Mark/Downloads/rr_4GB.img.zip /tmp
+unzip -o -d /tmp /tmp/rr_4GB.img.zip
+cp /tmp/rr_4GB.img /var/lib/vz/template/iso/
+
 
 echo "安装完成，请重启"
 
