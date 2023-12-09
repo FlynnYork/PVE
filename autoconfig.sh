@@ -46,7 +46,7 @@ echo "deb http://mirrors.ustc.edu.cn/proxmox/debian/ceph-reef bookworm no-subscr
 apt update
 
 echo "安装网络工具包"
-apt install -y git vim net-tools 
+apt install -y git zip vim net-tools 
 
 #添加无线网卡支持
 apt install -y wpasupplicant
